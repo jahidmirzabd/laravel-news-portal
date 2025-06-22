@@ -9,7 +9,7 @@
                     @foreach ($latestNews->take(1) as $news)
                         <div class="position-relative overflow-hidden rounded">
                             <img src="{{ $news->image ? asset('storage/images/' . $news->image) : asset('img/noimg.jpg') }}"
-                                class="img-fluid rounded img-zoomin w-100" alt="" style="height: 475px" />
+                                class="img-fluid rounded img-zoomin w-100" alt="" style="block-size: 475px" />
                             <div class="d-flex justify-content-center px-4 position-absolute flex-wrap"
                                 style="bottom: 10px; left: 0">
                                 <div class="text-white me-4"><i class="fa fa-clock"></i>
