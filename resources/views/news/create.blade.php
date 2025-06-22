@@ -80,7 +80,7 @@
                                                 <label>Image</label>
                                                 <input type="file" class="form-control" id="imageInput" name="image" />
                                                 <img id="imagePreview" src="#" alt="Preview"
-                                                    style="max-width: 200px; display: none;" class="img-fluid mt-4">
+                                                    style="max-inline-size: 200px; display: none;" class="img-fluid mt-4">
                                             </div>
                                             <div class="card-footer mt-3 d-flex justify-content-start">
                                                 <button type="submit" class="btn btn-success me-1"
@@ -101,12 +101,87 @@
         <!-- Load CKEditor -->
         <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 
-        <!-- Initialize -->
+        <!-- Initialize CKEditor with image resize support -->
         <script>
-            ClassicEditor
-                .create(document.querySelector('#editor'))
-                .catch(error => {
-                    console.error(error);
-                });
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+                toolbar: [
+                    'heading', '|',
+                    'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|',
+                    'insertTable', 'uploadImage', 'undo', 'redo'
+                ],
+                image: {
+                    resizeOptions: [
+                        {
+                            name: 'resizeImage:original',
+                            label: 'Original',
+                            value: null
+                        },
+                        {
+                            name: 'resizeImage:75',
+                            label: '75%',
+                            value: '75'
+                        },
+                        {
+                            name: 'resizeImage:50',
+                            label: '50%',
+                            value: '50'
+                        },
+                        {
+                            name: 'resizeImage:25',
+                            label: '25%',
+                            value: '25'
+                        }
+                    ],
+                    toolbar: [
+                        'imageStyle:alignLeft',
+                        'imageStyle:alignCenter',
+                        'imageStyle:alignRight',
+                        '|',
+                        'resizeImage'
+                    ]
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
         </script>
+
+
+//JavaScript to handle it silently and redirect
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('newsForm');
+    
+        if (form) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault(); // Stop normal form submission
+    
+                const formData = new FormData(form);
+    
+                fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest', // Let Laravel know it's AJAX
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.redirect_url) {
+                        // Redirect silently
+                        window.location.href = data.redirect_url;
+                    } else {
+                        alert(data.message || 'An error occurred.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Form submission error:', error);
+                    alert('Unexpected error. Please try again.');
+                });
+            });
+        }
+    });
+    </script>
+    
 @endsection

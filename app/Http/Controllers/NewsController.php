@@ -96,17 +96,13 @@ class NewsController extends Controller
 
             event(new NewsCreated($news));
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Successfully saved the data.',
-                'redirect_url' => route('dashboard')
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ]);
-        }
+          
+            // ✅ Redirect to custom URL
+            return redirect('/news/status')->with('success', 'Successfully saved the news.');
+
+            } catch (\Exception $e) {
+                return back()->with('error', 'Something went wrong: ' . $e->getMessage())->withInput();
+            }
     }
 
     /**
