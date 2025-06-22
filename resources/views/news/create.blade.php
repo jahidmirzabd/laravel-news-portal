@@ -62,7 +62,9 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="editor" class="col-12">Content</label>
+
                                                 <textarea class="form-control col-12" id="editor" name="content"></textarea>
+
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label for="exampleFormControlSelect1">Category</label>
@@ -95,4 +97,16 @@
             </div>
         </div>
     </div>
+
+        <!-- Load CKEditor -->
+        <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
+        <!-- Initialize -->
+        <script>
+            ClassicEditor
+                .create(document.querySelector('#editor'))
+                .catch(error => {
+                    console.error(error);
+                });
+        </script>
 @endsection
